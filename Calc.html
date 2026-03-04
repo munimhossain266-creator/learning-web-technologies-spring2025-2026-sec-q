@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator with Delete</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        input {
+            width: 600px;
+            height: 40px;
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: right;
+            padding-right: 10px;
+        }
+        
+        #buttonContainer {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            gap: 5px;
+            width: 315px;
+            margin: 20px auto;
+        }
+        
+        button {
+            width: 100px;
+            height: 45px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+       
+        
+    </style>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <input type="text" id="display" value="0" readonly>
+    <div id="buttonContainer"></div>
+
+    <script>
+        const display = document.getElementById('display');
+        const container = document.getElementById('buttonContainer');
+        
+        let num1 = '';
+        let operator = '';
+
+        
+        const buttonLabels = [
+            '7', '8', '9', '/', 
+            '4', '5', '6', '*', 
+            '1', '2', '3', '-', 
+            '0', '.', '=', '+', 
+            'C', 'DEL'
+        ];
+
+        buttonLabels.forEach(label => {
+            const btn = document.createElement('button');
+            btn.textContent = label;
+            if(label === 'DEL') btn.className = 'del-btn';
+            btn.addEventListener('click', () => handleClick(label));
+            container.appendChild(btn);
+        });
+
+        function handleClick(label) {
+            if (label === 'C') {
+                display.value = '0';
+                num1 = '';
+                operator = '';
+            } 
+           
+            else if (label === 'DEL') {
+                if (display.value.length > 1) {
+                    display.value = display.value.slice(0, -1);
+                } else {
+                    display.value = '0';
+                }
+            } 
+            else if (label === '=') {
+                if (num1 && operator) {
+                    const result = calculate(parseFloat(num1), parseFloat(display.value), operator);
+                    display.value = result;
+                    num1 = '';
+                    operator = '';
+                }
+            } 
+            else if (['+', '-', '*', '/'].includes(label)) {
+                num1 = display.value;
+                operator = label;
+                display.value = '0';
+            } 
+            else {
+                if (display.value === '0') {
+                    display.value = label;
+                } else {
+                    display.value += label;
+                }
+            }
+        }
+
+        function calculate(n1, n2, op) {
+            switch(op) {
+                case '+': return n1 + n2;
+                case '-': return n1 - n2;
+                case '*': return n1 * n2;
+                case '/': return n2 !== 0 ? n1 / n2 : 'Error';
+                default: return n2;
+            }
+        }
+    </script>
+</body>
+</html>
