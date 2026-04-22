@@ -1,13 +1,12 @@
 <?php
-session_start();
+    session_start();
+    
+    // Clear all session variables
+    session_unset();
+    
+    // Destroy the session
+    session_destroy();
 
-// Destroy all session data (logs the user out)
-session_unset();
-session_destroy();
-
-// Also clear the Remember Me cookie
-setcookie('remember_user', '', time() - 3600, '/');
-
-// Redirect to public home
-header("Location: index.php");
-exit;
+    // Redirect back to login page
+    header('location: login.html');
+?>
